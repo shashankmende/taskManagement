@@ -1,0 +1,32 @@
+
+*{
+    font-family: sans-serif;
+}
+
+
+.dashboard_wrapper{
+    height: 65px;
+    border-bottom: 1px solid gray;
+    box-shadow: 0 1px 5px 1px gray;
+    /* background-color: #F0F4F9; */
+    display: flex;
+    justify-content: center;
+}
+
+.nav_content {
+    width: 90%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* border: 1px solid red; */
+}
+
+.nav_heading {
+    
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 36px;
+        /* margin-bottom: 20px; */
+    
+}

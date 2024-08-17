@@ -1,0 +1,73 @@
+
+.dashboard_body {
+    width: 90%;
+    margin: auto;
+    margin-top: 40px;
+}
+
+.header_wrapper {
+    display: flex;
+    justify-content: space-between;
+    /* border: 1px solid red; */
+}
+.tasks_heading {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 36px;
+    /* margin-bottom: 20px; */
+}
+
+.dashboard_body {
+    padding: 20px;
+}
+
+.header_wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.tasks_heading {
+    font-size: 24px;
+    margin: 0;
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.btn-success {
+    background-color: #28a745;
+}
+
+.table_wrapper {
+    margin-top: 20px;
+}
+
+.tasks_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.tasks_table th,
+.tasks_table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+.tasks_table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.tasks_table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
