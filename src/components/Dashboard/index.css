@@ -1,3 +1,12 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.dashboard_bg_wrapper {
+    background-color: white;
+    height: 100vh;
+}
 
 .dashboard_body {
     width: 90%;
@@ -48,26 +57,55 @@
 
 .table_wrapper {
     margin-top: 20px;
+    /* border: 1px solid black; */
 }
 
 .tasks_table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
+    border: 1px solid #E9E8EB   ;
 }
 
-.tasks_table th,
-.tasks_table td {
-    border: 1px solid #ddd;
+/* E9E8EB */
+.tasks_table th {
+    /* border: 1px solid #ddd; */
+    /* border: 1px solid red; */
     padding: 12px;
     text-align: left;
 }
+.tasks_table td{
 
+    padding: 12px;
+    text-align: left;
+    background-color: white;
+    border-bottom: 1px solid #E9E8EB;
+}
 .tasks_table th {
-    background-color: #f4f4f4;
+    /* background-color: #f4f4f4; */
+    background-color: gray;
     font-weight: bold;
+    color:#ffffff;
 }
 
 .tasks_table tr:nth-child(even) {
     background-color: #f9f9f9;
+}
+
+.action_icons{
+    cursor: pointer;
+
+}
+
+
+.filter_wrapper {
+    padding: 10px;
+    border: 0.3px solid #c4aef0d3;
+    border-radius: 10px;
+    font-size: 16px;
+    outline: none;
+    /* margin-top: 20px; */
+    margin-right: 20px;
+    /* width: 45%; */
+    width: 250px;
 }

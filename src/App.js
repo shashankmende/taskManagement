@@ -1,4 +1,5 @@
 import './App.css';
+import AddTask from './components/AddTask/AddTask';
 import Authenticate from './components/Authenticate/Authenticate';
 import Dashboard from './components/Dashboard';
 import Profile from './components/Profile/Profile';
@@ -19,9 +20,10 @@ function App() {
     <Router>
       <ProjectState.Provider value={contextValue}>
         <Routes>
-          <Route path="/" element={<Authenticate />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path='/dashboard' element={<Dashboard/>}/>
+          <Route exact path="/" element={<Authenticate />} />
+          <Route exact path="/profile" element={<Profile />} />
+          <Route exact path='/dashboard' element={<Dashboard/>}/>
+          <Route exact path='/addTask' element={<AddTask/>}/>
         </Routes>
       </ProjectState.Provider>
     </Router>
