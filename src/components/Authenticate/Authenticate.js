@@ -125,19 +125,19 @@ const Authenticate = () => {
   
       if (loginResponse.status === 200) {
         localStorage.setItem("email",JSON.stringify(loginResponse.data.user.email))
-        toast.success(loginResponse.data.message, { position: "top-center" });
+        toast.success(loginResponse.data.message, { position: "top-right" });
         navigate('/profile');
       } else {
-        toast.error("Login failed. Please check your credentials and try again.", { position: "top-center" });
+        toast.error("Login failed. Please check your credentials and try again.", { position: "top-right" });
       }
     } catch (error) {
       console.error("Login error:", error);
       if (error.response && error.response.status === 400) {
-        toast.error("Login failed: Invalid email or password.", { position: "top-center" });
+        toast.error("Login failed: Invalid email or password.", { position: "top-right" });
       } else if (error.response && error.response.status === 500) {
-        toast.error("Server error: Please try again later.", { position: "top-center" });
+        toast.error("Server error: Please try again later.", { position: "top-right" });
       } else {
-        toast.error("An unexpected error occurred. Please try again.", { position: "top-center" });
+        toast.error("An unexpected error occurred. Please try again.", { position: "top-right" });
       }
     }
   };
@@ -166,23 +166,23 @@ const Authenticate = () => {
       console.error("Registration error:", error);
       if (error.response && error.response.status === 400) {
         toast.warning("Registration failed: Invalid data. Please check your input.", {
-          // position: "top-center",
-          style: { width: "500px" }
+          position: "top-right",
+          // style: { width: "500px" }
         });
       } else if (error.response && error.response.status === 409) {
         toast.info("Registration failed: Email already in use. Please use a different email.", {
-          // position: "top-center",
-          style: { width: "600px" }
+          position: "top-right",
+          // style: { width: "600px" }
         });
       } else if (error.response && error.response.status === 500) {
         toast.error("Server error: Please try again later.", {
-          // position: "top-center",
-          style: { width: "600px" }
+          position: "top-right",
+          // style: { width: "600px" }
         });
       } else {
         toast.error("An unexpected error occurred during registration. Please try again.", {
-          // position: "top-center",
-          style: { width: "600px" }
+          position: "top-right",
+          // style: { width: "600px" }
         });
       }
     }
@@ -217,7 +217,7 @@ const Authenticate = () => {
               <input
                 type="email"
                 className="input_field"
-                placeholder="Email"
+                placeholder="Registered Email"
                 required
                 name="logMail"
                 value={loginDet.logMail}
