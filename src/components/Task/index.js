@@ -1,57 +1,71 @@
-import React, { useState } from 'react'
-import DashBoardNav from '../DashboardNav'
-import './AddTask.css'
-import { FaArrowLeft } from "react-icons/fa";
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import './index.css';
+import DashBoardNav from '../DashboardNav';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { FaArrowLeft } from "react-icons/fa";
 
-const AddTask = () => {
-    const navigate = useNavigate()
+const Task = () => {
+    const { id } = useParams();
+    const navigate = useNavigate();
     const [taskDetails, setTaskDetails] = useState({
-        taskName: "",
-        description: "",
-        status: "TO_DO", 
-        assignee: "",
-        dueDate: ""
-    })
+        taskName: '',
+        description: '',
+        assignee: '',
+        status: 'TO_DO',
+        dueDate: ''
+    });
+
+    useEffect(() => {
+        const getTaskDetails = async () => {
+            try {
+                const url = `http://localhost:3000/auth/task/${id}`;
+                const response = await axios.get(url);
+                console.log("response from task", response);
+                if (response.status === 200) {
+                    setTaskDetails(response.data.task);
+                }
+            } catch (error) {
+                alert("Error", error.message);
+            }
+        };
+        getTaskDetails();
+    }, [id]);
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target
-        setTaskDetails(prevData => ({
-            ...prevData,
+        const { name, value } = e.target;
+        setTaskDetails({
+            ...taskDetails,
             [name]: value
-        }))
-    }
+        });
+    };
 
-    const onClickCreateTask = async (e) => {
-        e.preventDefault(); 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         try {
-            const url = 'http://localhost:3000/auth/task/'
-            const response = await axios.post(url, taskDetails)
-            console.log("response from add task", response)
-            if (response.status === 201) {
-                alert("Task added successfully")
+            const url = `http://localhost:3000/auth/task/${id}`;
+            const response = await axios.put(url, taskDetails);
+            if (response.status === 200) {
+                alert("Task updated successfully");
                 navigate("/dashboard");
             }
         } catch (error) {
-            alert("Error adding task")
-            console.error(error)
+            alert("Error updating task", error.message);
         }
-    }
+    };
 
     return (
-        <div className='addTask_wrapper'>
+        <div>
             <DashBoardNav />
-            <div className='addTask_body'>
+            <div className='task_body_wrapper'>
                 <div className='back_heading_wrapper'>
                     <FaArrowLeft size={25} style={{ cursor: "pointer" }} onClick={() => navigate("/dashboard")} />
-                    <h3>Create Task</h3>
+                    <h3>Update Task</h3>
                 </div>
-                <form className='addtask_form' onSubmit={onClickCreateTask}>
+                <form onSubmit={handleSubmit} className='update_body_form_wrapper'>
                     <input
                         type="text"
-                        name='taskName'
-                        placeholder='Enter task Name'
+                        name="taskName"
                         className='task_input'
                         value={taskDetails.taskName}
                         onChange={handleInputChange}
@@ -59,8 +73,7 @@ const AddTask = () => {
                     />
                     <input
                         type="text"
-                        name='description'
-                        placeholder='Description'
+                        name="description"
                         className='task_input'
                         value={taskDetails.description}
                         onChange={handleInputChange}
@@ -68,8 +81,7 @@ const AddTask = () => {
                     />
                     <input
                         type="text"
-                        name='assignee'
-                        placeholder='Assignee'
+                        name="assignee"
                         className='task_input'
                         value={taskDetails.assignee}
                         onChange={handleInputChange}
@@ -95,13 +107,11 @@ const AddTask = () => {
                         onChange={handleInputChange}
                         required
                     />
-                    <button type='submit' className='btn btn-success create_task_button'>
-                        Create Task
-                    </button>
+                    <button type='submit' style={{marginTop:"20px"}} className='btn btn-success'>Update Task</button>
                 </form>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default AddTask
+export default Task;

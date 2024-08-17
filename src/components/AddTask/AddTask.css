@@ -17,6 +17,7 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    flex-wrap: wrap;
     gap: 15px;
 }
 .addtask_form{
@@ -25,6 +26,10 @@
     box-shadow: 1px 1px 15px  1px rgb(220, 220, 220);
     border-radius: 10px;
     padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center ;
+    /* gap: 10px; */
 }
 
 .task_input{
@@ -51,5 +56,14 @@
 }
 
 .create_task_button{
-    margin: 15px 0;
+    /* margin: 15px 0; */
+    margin-top: 18px;
+}
+option{
+    padding: 7px;
+}
+
+.filter_wrapper {
+    display: flex;
+    align-items: center;
 }

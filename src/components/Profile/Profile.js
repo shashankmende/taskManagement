@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 
 const Profile = () => {
-  const { user, isAuthenticated, loginWithRedirect, isLoading, logout } =
+  const {   logout } =useAuth0()
     useAuth0();
   const [email, setEmail] = useState("");
   const [formData, setFormData] = useState({
@@ -31,8 +31,7 @@ const Profile = () => {
     if (storedEmail) {
       setEmail(JSON.parse(storedEmail));
     }
-    // Fetch existing user profile data from backend if needed
-    // fetchUserProfile();
+    
   }, []);
 
   const handleInputChange = (e) => {
@@ -112,15 +111,6 @@ const Profile = () => {
         />
         <br />
 
-        {/* <input 
-                    type="text"  
-                    name='organizationAddress' 
-                    placeholder='address' 
-                    className='email_input'
-                    value={formData.organizationAddress}
-                    onChange={handleInputChange}
-                    required
-                /> */}
 
         <input
           type="text"
@@ -163,9 +153,7 @@ const Profile = () => {
           <button type="submit" className="save_btn">
             Save
           </button>
-          {/* <button onClick={()=>logout({
-                logoutParams:{returnTo:window.location.origin}
-            })}>Logout</button> */}
+          
         </div>
       </form>
       <ToastContainer

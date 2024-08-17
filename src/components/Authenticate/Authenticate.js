@@ -58,14 +58,14 @@ const Authenticate = () => {
   }, [user, navigate]);
 
   useEffect(() => {
-    if (isLoading) return; // Wait until Auth0 has finished loading
+    if (isLoading) return; 
 
     if (isAuthenticated && user) {
-      // Store email in localStorage after successful login
+      
       localStorage.setItem('email', JSON.stringify(user.email));
       navigate('/profile');
     } else if (!isAuthenticated) {
-      navigate('/'); // Redirect to login if not authenticated
+      navigate('/'); 
     }
   }, [isAuthenticated, user, isLoading, navigate]);
 
@@ -98,12 +98,13 @@ const Authenticate = () => {
     loginWithRedirect({
       connection: provider,
     }).then(response => {
-      // Assuming `response.user.email` contains the user's email after a successful social login
+      
       localStorage.setItem('userEmail', JSON.stringify(response.user.email));
       navigate('/profile');
+      
     }).catch(error => {
       console.error("Social login error:", error);
-      toast.error("Social login failed. Please try again.", { position: "top-center" });
+      
     });
   };
   
@@ -112,35 +113,35 @@ const Authenticate = () => {
   const onSubmitLogin = async (e) => {
     e.preventDefault();
 
-  
     try {
-      const requestBody = {
-        email: loginDet.logMail,
-        password: loginDet.logPswd,
-      };
-      const url = 'http://localhost:3000/auth/login';
-  
-      const loginResponse = await axios.post(url, requestBody);
-      console.log("login response", loginResponse);
-  
-      if (loginResponse.status === 200) {
-        localStorage.setItem("email",JSON.stringify(loginResponse.data.user.email))
-        toast.success(loginResponse.data.message, { position: "top-right" });
-        navigate('/profile');
-      } else {
-        toast.error("Login failed. Please check your credentials and try again.", { position: "top-right" });
-      }
+        const requestBody = {
+            email: loginDet.logMail,
+            password: loginDet.logPswd,
+        };
+        const url = 'http://localhost:3000/auth/login';
+
+        const loginResponse = await axios.post(url, requestBody);
+        console.log("login response", loginResponse);
+
+        if (loginResponse.status === 200) { // Adjusted to 200 OK
+            localStorage.setItem("email", JSON.stringify(loginResponse.data.user.email));
+            toast.success(loginResponse.data.message, { position: "top-right" });
+            navigate('/profile');
+        } else {
+            toast.error("Login failed. Please check your credentials and try again.", { position: "top-right" });
+        }
     } catch (error) {
-      console.error("Login error:", error);
-      if (error.response && error.response.status === 400) {
-        toast.error("Login failed: Invalid email or password.", { position: "top-right" });
-      } else if (error.response && error.response.status === 500) {
-        toast.error("Server error: Please try again later.", { position: "top-right" });
-      } else {
-        toast.error("An unexpected error occurred. Please try again.", { position: "top-right" });
-      }
+        console.error("Login error:", error);
+        if (error.response && error.response.status === 400) {
+            toast.error("Login failed: Invalid email or password.", { position: "top-right" });
+        } else if (error.response && error.response.status === 500) {
+            toast.error("Server error: Please try again later.", { position: "top-right" });
+        } else {
+            toast.error("An unexpected error occurred. Please try again.", { position: "top-right" });
+        }
     }
-  };
+};
+
   
   const onSubmitRegister = async (e) => {
     e.preventDefault();
@@ -155,34 +156,36 @@ const Authenticate = () => {
       const registrationResponse = await axios.post(url, requestBody);
       console.log("registration response", registrationResponse);
   
-      if (registrationResponse.status === 200) {
-        
+
+      if (registrationResponse.status === 201) {
         toast.success(registrationResponse.data.message);
-        navigate('/profile');
-      } else {
+        // navigate('/profile');
+        setIsLoginActive(true)
+    } else {
         toast.warning("Registration failed. Please try again.");
-      }
+    }
+
     } catch (error) {
       console.error("Registration error:", error);
       if (error.response && error.response.status === 400) {
         toast.warning("Registration failed: Invalid data. Please check your input.", {
           position: "top-right",
-          // style: { width: "500px" }
+          
         });
       } else if (error.response && error.response.status === 409) {
         toast.info("Registration failed: Email already in use. Please use a different email.", {
           position: "top-right",
-          // style: { width: "600px" }
+          
         });
       } else if (error.response && error.response.status === 500) {
         toast.error("Server error: Please try again later.", {
           position: "top-right",
-          // style: { width: "600px" }
+          
         });
       } else {
         toast.error("An unexpected error occurred during registration. Please try again.", {
           position: "top-right",
-          // style: { width: "600px" }
+          
         });
       }
     }
@@ -244,7 +247,7 @@ const Authenticate = () => {
               <button type="submit" className="submit_btn">
                 Log In
               </button>
-              {/* <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} /> */}
+              
             </form>
           ) : (
             <form className="input_group" onSubmit={onSubmitRegister}>
@@ -278,7 +281,7 @@ const Authenticate = () => {
               <button type="submit" className="submit_btn">
                 Register
               </button>
-              {/* <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} /> */}
+              
             </form>
             
           )}
@@ -291,27 +294,27 @@ const Authenticate = () => {
         </div>
 
         <div className="social_icons">
-          <img
-            src={googleIcon}
-            alt="Google"
-            className="social_icon"
-            style={{ borderRadius: "50%" }}
-            onClick={() => handleLogin("google-oauth2")}
-          />
-          <img
-            src={facebookIcon}
-            alt="Facebook"
-            style={{ borderRadius: "50%" }}
-            className="social_icon"
-            onClick={() => handleLogin("facebook")}
-          />
-          <img
-            src={microsoftIcon}
-            alt="Microsoft"
-            className="social_icon"
-            onClick={() => handleLogin("windowslive")}
-          />
-        </div>
+      <img
+        src={googleIcon}
+        alt="Google"
+        className="social_icon"
+        style={{ borderRadius: "50%" }}
+        onClick={() => handleLogin("google-oauth2")}
+      />
+      <img
+        src={facebookIcon}
+        alt="Facebook"
+        style={{ borderRadius: "50%" }}
+        className="social_icon"
+        onClick={() => handleLogin("facebook")}
+      />
+      <img
+        src={microsoftIcon}
+        alt="Microsoft"
+        className="social_icon"
+        onClick={() => handleLogin("windowslive")}
+      />
+    </div>
       </div>
     </div>
   );
