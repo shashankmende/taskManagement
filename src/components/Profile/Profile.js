@@ -111,7 +111,6 @@ const Profile = () => {
         />
         <br />
 
-
         <input
           type="text"
           name="city"

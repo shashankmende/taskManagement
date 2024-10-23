@@ -11,9 +11,15 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PasswordStrength from "../PasswordStrength/PasswordStrength";
 
 const Authenticate = () => {
-  const { loginWithRedirect, user: auth0User, isAuthenticated, isLoading } = useAuth0();
+  const {
+    loginWithRedirect,
+    user: auth0UseruseAuth0,
+    isAuthenticated,
+    isLoading,
+  } = ();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoginActive, setIsLoginActive] = useState(true);
   const [loginDet, setLoginDet] = useState({ logMail: "", logPswd: "" });
@@ -21,54 +27,62 @@ const Authenticate = () => {
   const { user, setUser } = useContext(ProjectState);
   const navigate = useNavigate();
 
-
-  
   useEffect(() => {
     const socialLoginSignup = async () => {
       if (isAuthenticated) {
         try {
-          const { email, given_name: firstName, family_name: lastName, picture } = auth0User;
-  
+          const {
+            email,
+            given_name: firstName,
+            family_name: lastName,
+            picture,
+          } = auth0User;
+
           const payload = {
             email,
             firstName: firstName || "",
             lastName: lastName || "",
             picture,
-            authProvider: auth0User.sub.split("|")[0]
+            authProvider: auth0User.sub.split("|")[0],
           };
-  
-          const response = await axios.post('http://localhost:3000/auth/social-login-signup', payload);
-  
-          console.log('Response from backend:', response.data);
+          const url = `${process.env.REACT_APP_URL}/auth/social-login-signup`;
+          console.log("url", url);
+
+          // const url ='https://taskmanagementbackend-vhi8.onrender.com/auth/social-login-signup'
+          // const url = "http://localhost:3000/auth/social-login-signup"
+
+          const response = await axios.post(url, payload);
+
+          console.log("Response from backend:", response.data);
           setUser(response.data.user);
         } catch (error) {
-          console.error('Error during social login/signup:', error.response?.data || error.message);
+          console.error(
+            "Error during social login/signup:",
+            error.response?.data || error.message
+          );
         }
       }
     };
-  
+
     socialLoginSignup();
   }, [isAuthenticated, auth0User, setUser]);
-  
+
   useEffect(() => {
     if (user) {
-      
       navigate("/profile");
     }
   }, [user, navigate]);
 
   useEffect(() => {
-    if (isLoading) return; 
+    if (isLoading) return;
 
     if (isAuthenticated && user) {
-      
-      localStorage.setItem('email', JSON.stringify(user.email));
-      navigate('/profile');
+      localStorage.setItem("email", JSON.stringify(user.email));
+      navigate("/profile");
     } else if (!isAuthenticated) {
-      navigate('/'); 
+      navigate("/");
     }
   }, [isAuthenticated, user, isLoading, navigate]);
-
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -80,6 +94,7 @@ const Authenticate = () => {
 
   const onChangeLoginInput = (e) => {
     const { name, value } = e.target;
+
     setLoginDet((prevData) => ({
       ...prevData,
       [name]: value,
@@ -97,52 +112,62 @@ const Authenticate = () => {
   const handleLogin = (provider) => {
     loginWithRedirect({
       connection: provider,
-    }).then(response => {
-      
-      localStorage.setItem('userEmail', JSON.stringify(response.user.email));
-      navigate('/profile');
-      
-    }).catch(error => {
-      console.error("Social login error:", error);
-      
-    });
+    })
+      .then((response) => {
+        localStorage.setItem("userEmail", JSON.stringify(response.user.email));
+        navigate("/profile");
+      })
+      .catch((error) => {
+        console.error("Social login error:", error);
+      });
   };
-  
-  
-  
+
   const onSubmitLogin = async (e) => {
     e.preventDefault();
 
     try {
-        const requestBody = {
-            email: loginDet.logMail,
-            password: loginDet.logPswd,
-        };
-        const url = 'http://localhost:3000/auth/login';
+      const requestBody = {
+        email: loginDet.logMail,
+        password: loginDet.logPswd,
+      };
+      const url = `${process.env.REACT_APP_URL}/auth/login`;
+      // const url = "http://localhost:3000/auth/login";
 
-        const loginResponse = await axios.post(url, requestBody);
-        console.log("login response", loginResponse);
+      const loginResponse = await axios.post(url, requestBody);
+      console.log("login response", loginResponse);
 
-        if (loginResponse.status === 200) { // Adjusted to 200 OK
-            localStorage.setItem("email", JSON.stringify(loginResponse.data.user.email));
-            toast.success(loginResponse.data.message, { position: "top-right" });
-            navigate('/profile');
-        } else {
-            toast.error("Login failed. Please check your credentials and try again.", { position: "top-right" });
-        }
+      if (loginResponse.status === 200) {
+        // Adjusted to 200 OK
+        localStorage.setItem(
+          "email",
+          JSON.stringify(loginResponse.data.user.email)
+        );
+        toast.success(loginResponse.data.message, { position: "top-right" });
+        navigate("/profile");
+      } else {
+        toast.error(
+          "Login failed. Please check your credentials and try again.",
+          { position: "top-right" }
+        );
+      }
     } catch (error) {
-        console.error("Login error:", error);
-        if (error.response && error.response.status === 400) {
-            toast.error("Login failed: Invalid email or password.", { position: "top-right" });
-        } else if (error.response && error.response.status === 500) {
-            toast.error("Server error: Please try again later.", { position: "top-right" });
-        } else {
-            toast.error("An unexpected error occurred. Please try again.", { position: "top-right" });
-        }
+      console.error("Login error:", error);
+      if (error.response && error.response.status === 400) {
+        toast.error("Login failed: Invalid email or password.", {
+          position: "top-right",
+        });
+      } else if (error.response && error.response.status === 500) {
+        toast.error("Server error: Please try again later.", {
+          position: "top-right",
+        });
+      } else {
+        toast.error("An unexpected error occurred. Please try again.", {
+          position: "top-right",
+        });
+      }
     }
-};
+  };
 
-  
   const onSubmitRegister = async (e) => {
     e.preventDefault();
     try {
@@ -150,47 +175,49 @@ const Authenticate = () => {
         email: registerDet.regMail,
         password: registerDet.regPswd,
       };
-  
-      const url = 'http://localhost:3000/auth/signup';
-  
+
+      const url = "http://localhost:3000/auth/signup";
+
       const registrationResponse = await axios.post(url, requestBody);
       console.log("registration response", registrationResponse);
-  
 
       if (registrationResponse.status === 201) {
         toast.success(registrationResponse.data.message);
         // navigate('/profile');
-        setIsLoginActive(true)
-    } else {
+        setIsLoginActive(true);
+      } else {
         toast.warning("Registration failed. Please try again.");
-    }
-
+      }
     } catch (error) {
       console.error("Registration error:", error);
       if (error.response && error.response.status === 400) {
-        toast.warning("Registration failed: Invalid data. Please check your input.", {
-          position: "top-right",
-          
-        });
+        toast.warning(
+          "Registration failed: Invalid data. Please check your input.",
+          {
+            position: "top-right",
+          }
+        );
       } else if (error.response && error.response.status === 409) {
-        toast.info("Registration failed: Email already in use. Please use a different email.", {
-          position: "top-right",
-          
-        });
+        toast.info(
+          "Registration failed: Email already in use. Please use a different email.",
+          {
+            position: "top-right",
+          }
+        );
       } else if (error.response && error.response.status === 500) {
         toast.error("Server error: Please try again later.", {
           position: "top-right",
-          
         });
       } else {
-        toast.error("An unexpected error occurred during registration. Please try again.", {
-          position: "top-right",
-          
-        });
+        toast.error(
+          "An unexpected error occurred during registration. Please try again.",
+          {
+            position: "top-right",
+          }
+        );
       }
     }
   };
-  
 
   return (
     <div className="background_wrapper">
@@ -201,7 +228,7 @@ const Authenticate = () => {
             className={`toggle_btn ${isLoginActive ? "active" : ""}`}
             onClick={() => toggleForm(true)}
           >
-            Log In
+            Login
           </button>
           <button
             type="button"
@@ -213,7 +240,9 @@ const Authenticate = () => {
         </div>
 
         <div
-          className={`form_content ${isLoginActive ? "login_active" : "register_active"}`}
+          className={`form_content ${
+            isLoginActive ? "login_active" : "register_active"
+          }`}
         >
           {isLoginActive ? (
             <form className="input_group" onSubmit={onSubmitLogin}>
@@ -236,6 +265,7 @@ const Authenticate = () => {
                   value={loginDet.logPswd}
                   onChange={onChangeLoginInput}
                 />
+                <PasswordStrength password={loginDet.logPswd} />
                 <button
                   type="button"
                   className="password_toggle"
@@ -247,7 +277,6 @@ const Authenticate = () => {
               <button type="submit" className="submit_btn">
                 Log In
               </button>
-              
             </form>
           ) : (
             <form className="input_group" onSubmit={onSubmitRegister}>
@@ -281,12 +310,14 @@ const Authenticate = () => {
               <button type="submit" className="submit_btn">
                 Register
               </button>
-              
             </form>
-            
           )}
         </div>
-        <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} />
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+        />
 
         <div className="line_wrapper">
           <hr className="horizontal_line" />
@@ -294,27 +325,27 @@ const Authenticate = () => {
         </div>
 
         <div className="social_icons">
-      <img
-        src={googleIcon}
-        alt="Google"
-        className="social_icon"
-        style={{ borderRadius: "50%" }}
-        onClick={() => handleLogin("google-oauth2")}
-      />
-      <img
-        src={facebookIcon}
-        alt="Facebook"
-        style={{ borderRadius: "50%" }}
-        className="social_icon"
-        onClick={() => handleLogin("facebook")}
-      />
-      <img
-        src={microsoftIcon}
-        alt="Microsoft"
-        className="social_icon"
-        onClick={() => handleLogin("windowslive")}
-      />
-    </div>
+          <img
+            src={googleIcon}
+            alt="Google"
+            className="social_icon"
+            style={{ borderRadius: "50%" }}
+            onClick={() => handleLogin("google-oauth2")}
+          />
+          <img
+            src={facebookIcon}
+            alt="Facebook"
+            style={{ borderRadius: "50%" }}
+            className="social_icon"
+            onClick={() => handleLogin("facebook")}
+          />
+          <img
+            src={microsoftIcon}
+            alt="Microsoft"
+            className="social_icon"
+            onClick={() => handleLogin("windowslive")}
+          />
+        </div>
       </div>
     </div>
   );
